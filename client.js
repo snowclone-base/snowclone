@@ -24,4 +24,4 @@ process.on("exit", () => {
 });
 
 await subscriber.connect();
-await subscriber.listenTo("todos_change");
+await subscriber.listenTo("channel");

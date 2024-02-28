@@ -11,7 +11,16 @@
 
 - run `npm install`
 - start the listener client with `npm start`
-- connect to the database from another psql terminal and issue NOTIFY commands to channel
-    ```sql
-        NOTIFY 'channel', '{"message": "hello"}';
-    ```
+- create a .env file with the following:
+  - PG_HOST
+  - PG_PORT
+  - PG_DATABASE
+  - PG_USER
+  - PG_PASSWORD
+- PG_DATABASE=supaSkateboard
+- The other env variables you can find by running `\conninfo` while connected to psql
+- connect to the database from another psql terminal and test by adding a record to the todos table:
+  `sql
+        INSERT INTO todos (title, done, username, todolist_id) VALUES
+('Test notifications', false, 'user1', 1);
+    `
