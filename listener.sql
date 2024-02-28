@@ -2,7 +2,14 @@
 CREATE OR REPLACE FUNCTION notify_todos_change()
 RETURNS TRIGGER AS $$
 BEGIN
-    PERFORM pg_notify('todos_change', '');
+    PERFORM pg_notify('todos_change', json_build_object(
+        'action', TG_OP,
+        'id', NEW.id,
+        'title', NEW.title,
+        'done', NEW.done,
+        'username', NEW.username,
+        'todolist_id', NEW.todolist_id
+    )::text);
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;

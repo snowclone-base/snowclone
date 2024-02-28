@@ -9,9 +9,9 @@ const subscriber = createSubscriber({
   password: process.env.PG_PASSWORD,
 });
 
-subscriber.notifications.on("channel", (payload) => {
+subscriber.notifications.on("todos_change", (payload) => {
   // Payload as passed to subscriber.notify() -> must pass payload as JSON
-  console.log("Received notification in 'channel':", payload);
+  console.log("Received notification in 'todos_change':", payload);
 });
 
 subscriber.events.on("error", (error) => {
@@ -24,4 +24,4 @@ process.on("exit", () => {
 });
 
 await subscriber.connect();
-await subscriber.listenTo("channel");
+await subscriber.listenTo("todos_change");
