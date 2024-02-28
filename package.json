@@ -1,0 +1,38 @@
+{
+  "name": "relay",
+  "version": "1.0.0",
+  "description": "- Run `createdb supaSkateboard` - Connect to db using `psql supaSkateboard` - Run the SQL in supaSchema.sql to create tables - Run the SQL in seed-data.sql to populate the tables - Run the SQL in listener.sql to attach a listener for any updates in todos - Run `LISTEN todos_change;` while connected to the supaSkateboard database - Connect to supaSkateboard from a different terminal and perform insert / update / delete on a todo - From the listening terminal, run any sql command `;` and you should receive the notification",
+  "main": "client.js",
+  "dependencies": {
+    "buffer-writer": "^2.0.0",
+    "debug": "^4.3.4",
+    "dotenv": "^16.4.5",
+    "ms": "^2.1.2",
+    "packet-reader": "^1.0.0",
+    "pg": "^8.11.3",
+    "pg-cloudflare": "^1.1.1",
+    "pg-connection-string": "^2.6.2",
+    "pg-format": "^1.0.4",
+    "pg-int8": "^1.0.1",
+    "pg-listen": "^1.7.0",
+    "pg-pool": "^3.6.1",
+    "pg-protocol": "^1.6.0",
+    "pg-types": "^2.2.0",
+    "pgpass": "^1.0.5",
+    "postgres-array": "^2.0.0",
+    "postgres-bytea": "^1.0.0",
+    "postgres-date": "^1.0.7",
+    "postgres-interval": "^1.2.0",
+    "split2": "^4.2.0",
+    "typed-emitter": "^0.1.0",
+    "xtend": "^4.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node client.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
