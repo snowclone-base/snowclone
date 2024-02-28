@@ -1,8 +1,8 @@
--- Create a new database if not exists
-CREATE DATABASE IF NOT EXISTS supaSkateboard;
+-- -- Create a new database if not exists
+-- CREATE DATABASE IF NOT EXISTS supaSkateboard;
 
--- Use the newly created database
-USE supaSkateboard;
+-- -- Use the newly created database
+-- USE supaSkateboard;
 
 CREATE TABLE todolists (
   id serial PRIMARY KEY,
