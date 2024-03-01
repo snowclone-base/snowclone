@@ -1,6 +1,8 @@
 import "dotenv/config";
+import { WebSocketServer } from "ws";
 import createSubscriber from "pg-listen";
 
+const wss = new WebSocketServer({ port: 8080 });
 const subscriber = createSubscriber({
   host: process.env.PG_HOST,
   port: process.env.PG_PORT,
@@ -9,9 +11,18 @@ const subscriber = createSubscriber({
   password: process.env.PG_PASSWORD,
 });
 
+wss.on("connection", (ws) => {
+  ws.on("message", (message) => {
+    console.log(`Received message: ${message}`);
+  });
+});
+
 subscriber.notifications.on("todos_change", (payload) => {
   // Payload as passed to subscriber.notify() -> must pass payload as JSON
   console.log("Received notification in 'todos_change':", payload);
+  wss.clients.forEach((client) => {
+    client.send(JSON.stringify(payload));
+  });
 });
 
 subscriber.events.on("error", (error) => {
@@ -24,4 +35,4 @@ process.on("exit", () => {
 });
 
 await subscriber.connect();
-await subscriber.listenTo("channel");
+await subscriber.listenTo("todos_change");
