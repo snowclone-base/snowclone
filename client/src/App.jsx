@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import FileUpload from "./components/FileUpload";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -24,6 +25,7 @@ function App() {
           <li key={index}>{message}</li>
         ))}
       </ul>
+      <FileUpload />
     </div>
   );
 }
