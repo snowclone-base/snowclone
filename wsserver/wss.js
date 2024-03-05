@@ -9,6 +9,7 @@ const subscriber = createSubscriber({
   database: process.env.PG_DATABASE,
   user: process.env.PG_USER,
   password: process.env.PG_PASSWORD,
+  // connectionString: process.env.DATABASE_URL,
 });
 
 wss.on("connection", (ws) => {
