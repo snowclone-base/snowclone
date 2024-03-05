@@ -10,6 +10,7 @@ services:
     ports:
       - "5175:5175"
     environment: 
+      PORT: "5175"
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
     volumes:
     - ./server:/server
