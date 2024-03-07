@@ -1,5 +1,11 @@
 ## Setup & Instructions
 
+**updated commands for starting via docker**
+- start docker desktop
+- run `docker compose up` to start the client, server, database, and web socket server
+
+**commands for running locally**
+
 - Run `createdb supaSkateboard`
 - Connect to db using `psql supaSkateboard`
 - Run the SQL in supaSchema.sql to create tables

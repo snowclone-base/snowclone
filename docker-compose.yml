@@ -1,0 +1,41 @@
+services: 
+  frontend: 
+    build: client
+    ports: 
+      - "5173:5173"
+    volumes: 
+      - ./client:/client
+  server: 
+    build: server
+    ports:
+      - "5175:5175"
+    environment: 
+      PORT: "5175"
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+    volumes:
+    - ./server:/server
+  wss: 
+    build: wsserver
+    ports: 
+      - "8080:8080"
+    environment:
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+      PG_HOST: db
+      PG_PORT: "5432"
+      PG_DATABASE: postgres
+    volumes: 
+      - ./wsserver:/wss
+  db: 
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes: 
+      - db:/var/lib/postgresql/data
+volumes: 
+  db: 
+    driver: local
