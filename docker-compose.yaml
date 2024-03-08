@@ -7,7 +7,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    restart: unless-stopped    
     ports:
       - "3000:3000"
     # Available environment variables documented here:
@@ -24,36 +23,34 @@ services:
       - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
       # JWT PASSWORD for todo_user
       - PGRST_JWT_SECRET="O9fGlY0rDdDyW1SdCTaoqLmgQ2zZeCz6"
+    restart: always
   admin:
     container_name: db-admin
-    build: admin
+    image: lukepow/relay-admin:latest
     depends_on:
       db:
         condition: service_healthy
-    restart: unless-stopped       
     ports:
       - "5173:5173"
     volumes:
       - ./admin:/admin
   server:
-    build: server
+    image: lukepow/relay-server:1.0.0
     depends_on:
       db:
         condition: service_healthy
-    restart: unless-stopped    
     ports:
       - "5175:5175"
     environment:
       PORT: "5175"
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
     volumes:
-      - ./server:/server  
+      - ./server:/server
   wss:
-    build: wsserver
+    image: lukepow/relay-wss:1.0.0
     depends_on:
       db:
         condition: service_healthy
-    restart: unless-stopped      
     ports:
       - "8080:8080"
     environment:
@@ -67,13 +64,18 @@ services:
   db:
     container_name: postgres
     image: postgres
-    restart: unless-stopped
+    restart: always
     ports:
       - "5433:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
+    # - POSTGRES_USER=authenticator
+    # - POSTGRES_PASSWORD=mysecretpassword
+    # - POSTGRES_DB=postgres
+    # - DB_ANON_ROLE=web_anon
+    # - DB_SCHEMA=api
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
