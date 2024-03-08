@@ -1,21 +1,12 @@
-version: '3'
+version: "3"
 
 services:
-  ##################
-  # postgrest-demo #
-  ##################
-  # postgrest-demo:
-  #   container_name: postgrest-demo
-  #   image: nginx:mainline-alpine
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     # anything in html directory is hosted via nginx
-  #     - "./html:/usr/share/nginx/html"
-  #   restart: always
   postgrest:
-    container_name: postgrest
+    container_name: postgREST
     image: postgrest/postgrest:latest
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
     # Available environment variables documented here:
@@ -30,55 +21,68 @@ services:
       - PGRST_DB_ANON_ROLE=web_anon
       # Overrides the base URL used within the OpenAPI self-documentation hosted at the API root path
       - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
-    networks:
-      - postgrest-backend
+      # JWT PASSWORD for todo_user
+      - PGRST_JWT_SECRET="O9fGlY0rDdDyW1SdCTaoqLmgQ2zZeCz6"
     restart: always
-  frontend: 
+  admin:
     container_name: db-admin
-    build: client
-    ports: 
+    build: admin
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
       - "5173:5173"
-    volumes: 
-      - ./client:/client
-  server: 
+    volumes:
+      - ./admin:/admin
+  server:
     build: server
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "5175:5175"
-    environment: 
+    environment:
       PORT: "5175"
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
     volumes:
-    - ./server:/server
-  # wss: 
-  #   build: wsserver
-  #   ports: 
-  #     - "8080:8080"
-  #   environment:
-  #     PG_USER: postgres
-  #     PG_PASSWORD: postgres
-  #     PG_HOST: db
-  #     PG_PORT: "5432"
-  #     PG_DATABASE: postgres
-  #   volumes: 
-  #     - ./wsserver:/wss
-  db: 
+      - ./server:/server
+  wss:
+    build: wsserver
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+      PG_HOST: db
+      PG_PORT: "5432"
+      PG_DATABASE: postgres
+    volumes:
+      - ./wsserver:/wss
+  db:
     container_name: postgres
     image: postgres
+    restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
-      - POSTGRES_USER=authenticator
-      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
-      - DB_ANON_ROLE=web_anon
-      - DB_SCHEMA=api
-    volumes: 
+    # - POSTGRES_USER=authenticator
+    # - POSTGRES_PASSWORD=mysecretpassword
+    # - POSTGRES_DB=postgres
+    # - DB_ANON_ROLE=web_anon
+    # - DB_SCHEMA=api
+    volumes:
       - db:/var/lib/postgresql/data
-    networks:
-      - postgrest-backend
-volumes: 
-  db: 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  db:
     driver: local
-networks:
-  postgrest-backend:
-    driver: bridge

@@ -15,6 +15,6 @@ $$ LANGUAGE plpgsql;
 
 -- Create a trigger to execute the function on todos changes
 CREATE TRIGGER todos_change_trigger
-AFTER INSERT OR UPDATE OR DELETE ON todos
+AFTER INSERT OR UPDATE OR DELETE ON api.todos -- changed 'todos' to api.todos
 FOR EACH ROW
 EXECUTE FUNCTION notify_todos_change();
