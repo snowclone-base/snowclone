@@ -6,14 +6,26 @@ function App() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const client = new WebSocket("ws://localhost:8080");
-    client.onmessage = (event) => {
-      const message = event.data;
-      setMessages((prev) => [...prev, message]);
+    const eventSource = new EventSource('http://localhost:8080');
+
+    const handleTodosChange = (event) => {
+      const data = event.data
+      console.log("data:" , data);
+      setMessages((prevMessages) => [...prevMessages, data]);
     };
 
+    eventSource.addEventListener('todos_change', (event) => {
+      const newTodo = JSON.parse(event.data);
+      console.log("todo:", newTodo);
+    });
+
+    eventSource.onmessage = (event) => {
+      handleTodosChange(event)
+    }
+
     return () => {
-      client.close();
+      eventSource.removeEventListener('todos_change', handleTodosChange);
+      eventSource.close();
     };
   }, []);
 

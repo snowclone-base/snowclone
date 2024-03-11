@@ -23,10 +23,10 @@ services:
       - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
       # JWT PASSWORD for todo_user
       - PGRST_JWT_SECRET="O9fGlY0rDdDyW1SdCTaoqLmgQ2zZeCz6"
-    restart: always
+    restart: unless-stopped
   admin:
     container_name: db-admin
-    image: lukepow/relay-admin:latest
+    image: lukepow/relay-admin:2.0.0
     depends_on:
       db:
         condition: service_healthy
@@ -46,8 +46,8 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
     volumes:
       - ./server:/server
-  wss:
-    image: lukepow/relay-wss:1.0.0
+  eventserver:
+    image: lukepow/relay-eventserver:2.0.0
     depends_on:
       db:
         condition: service_healthy
@@ -60,22 +60,17 @@ services:
       PG_PORT: "5432"
       PG_DATABASE: postgres
     volumes:
-      - ./wsserver:/wss
+      - ./eventserver:/eventserver
   db:
     container_name: postgres
     image: postgres
-    restart: always
+    restart: unless-stopped
     ports:
       - "5433:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
-    # - POSTGRES_USER=authenticator
-    # - POSTGRES_PASSWORD=mysecretpassword
-    # - POSTGRES_DB=postgres
-    # - DB_ANON_ROLE=web_anon
-    # - DB_SCHEMA=api
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
