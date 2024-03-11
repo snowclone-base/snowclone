@@ -39,5 +39,3 @@
   `sql
         INSERT INTO todos (title, done, username, todolist_id) VALUES
 ('Test notifications', false, 'user1', 1); -->
-
-    `
