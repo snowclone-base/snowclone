@@ -1,7 +1,6 @@
 {
   "name": "relay",
   "version": "1.0.0",
-  "description": "- Run `createdb supaSkateboard` - Connect to db using `psql supaSkateboard` - Run the SQL in supaSchema.sql to create tables - Run the SQL in seed-data.sql to populate the tables - Run the SQL in listener.sql to attach a listener for any updates in todos - Run `LISTEN todos_change;` while connected to the supaSkateboard database - Connect to supaSkateboard from a different terminal and perform insert / update / delete on a todo - From the listening terminal, run any sql command `;` and you should receive the notification",
   "main": "wss.js",
   "dependencies": {
     "buffer-writer": "^2.0.0",
@@ -25,12 +24,11 @@
     "postgres-interval": "^1.2.0",
     "split2": "^4.2.0",
     "typed-emitter": "^0.1.0",
-    "ws": "^8.16.0",
     "xtend": "^4.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node wss.js"
+    "start": "node eventServer.js"
   },
   "keywords": [],
   "author": "",
