@@ -21,8 +21,8 @@ services:
       - PGRST_DB_ANON_ROLE=web_anon
       # Overrides the base URL used within the OpenAPI self-documentation hosted at the API root path
       - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
-      # JWT PASSWORD for todo_user
-      - PGRST_JWT_SECRET="O9fGlY0rDdDyW1SdCTaoqLmgQ2zZeCz6"
+      # JWT PASSWORD for todo_user (notice no quotes around below password)
+      - PGRST_JWT_SECRET=O9fGlY0rDdDyW1SdCTaoqLmgQ2zZeCz6
     restart: unless-stopped
   admin:
     container_name: db-admin
@@ -63,7 +63,7 @@ services:
       - ./eventserver:/eventserver
   db:
     container_name: postgres
-    image: postgres
+    image: 6esxh87qep2f6ksk/postgres-custom-init:latest
     restart: unless-stopped
     ports:
       - "5433:5432"
