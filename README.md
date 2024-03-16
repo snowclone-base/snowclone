@@ -3,13 +3,12 @@
 **updated commands for starting via docker**
 
 - start docker desktop
-- run `docker compose up` to start the client, server, database, and web socket server
-- run `docker exec -it [container_id] psql --username=postgres` to login to psql server
-  - inside psql instance, execute commands from within postgrest-schema.sql and listener.sql
-  - exit psql with `\q`
-- on command line, run `export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidG9kb191c2VyIn0.87F2LFUD9xibzcf0NpdjwuS-3fDXVv48QF2cGU3VXyA"`
+- run `docker compose up` to start the admin, server, database, and eventserver
+- on command line, run `export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGV2X2FkbWluIn0.AGT3mJ9MB8HEBBOvuOWtjSWvA4PALfzhbaaOB-qFD8I` (no quotes!)
+- the above is your JWT Token for the newly created role: `dev_admin`. Now you can run curl commands against the new API!
+  - dev_admin role on our database by default has ALL privileges to ALL tables and ALL sequences (necessary for inserting new data) in schema 'api'. (see /sql/apiSchema.sql for exact privileges granted)
+- database is currently empty but you can upload the /sql/testSchema.sql to our admin interface if you want to try out the below examples. same goes for uploading /sql/listener.sql if you want to demo the realtime features.
 
-- the above is your JWT Token for the newly created todo_user in postgREST. now you can run curl commands against the new API!
   ex1: add a todo `curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d '{"username":"Elvis Presley", "title":"Thank ya very much", "todolist_id":"3", "done":"true"}' http://localhost:3000/todos`
 
   ex2: view all todos `curl -H "Authorization: Bearer $TOKEN" http://localhost:3000/todos`
@@ -39,3 +38,5 @@
   `sql
         INSERT INTO todos (title, done, username, todolist_id) VALUES
 ('Test notifications', false, 'user1', 1); -->
+
+<!-- current Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGV2X2FkbWluIn0.AGT3mJ9MB8HEBBOvuOWtjSWvA4PALfzhbaaOB-qFD8I -->
