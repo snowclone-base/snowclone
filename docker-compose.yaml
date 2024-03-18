@@ -3,7 +3,7 @@ version: "3"
 services:
   postgrest:
     container_name: postgREST
-    image: postgrest/postgrest:latest
+    image: 6esxh87qep2f6ksk/postgrest-curl:latest # postgrest/postgrest:latest
     depends_on:
       db:
         condition: service_healthy
@@ -23,7 +23,15 @@ services:
       - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
       # JWT PASSWORD for todo_user (notice no quotes around below password)
       - PGRST_JWT_SECRET=O9fGlY0rDdDyW1SdCTaoqLmgQ2zZeCz6
+      # Enable admin server port for health check
+      - PGRST_ADMIN_SERVER_PORT=3001
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/ready || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   admin:
     container_name: db-admin
     image: lukepow/relay-admin:2.0.0
@@ -81,9 +89,17 @@ services:
   swagger-ui:
     container_name: swagger-ui
     image: swaggerapi/swagger-ui
+    depends_on:
+      db:
+        condition: service_healthy
+      postgrest:
+        condition: service_healthy
     ports:
       - "8081:8080"
     environment:
+      # saw the API_URL property on the postgREST tutorial page, seems to work if uncommented
+      # and then swagger_json and associated volumes lines are commented out.
+      # - API_URL=http://localhost:3000/
       - SWAGGER_JSON=/api/openapi.json
     volumes:
       - ./swagger:/api
