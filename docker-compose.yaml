@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
   admin:
     container_name: db-admin
-    image: lukepow/relay-admin:2.0.0
+    image: snowclone/admin:1.0.0
     depends_on:
       db:
         condition: service_healthy
@@ -35,7 +35,7 @@ services:
     volumes:
       - ./admin:/admin
   server:
-    image: lukepow/relay-server:1.0.0
+    image: snowclone/server:1.0.0
     depends_on:
       db:
         condition: service_healthy
@@ -47,7 +47,7 @@ services:
     volumes:
       - ./server:/server
   eventserver:
-    image: lukepow/relay-eventserver:2.0.0
+    image: snowclone/eventserver:1.0.0
     depends_on:
       db:
         condition: service_healthy
@@ -63,7 +63,7 @@ services:
       - ./eventserver:/eventserver
   db:
     container_name: postgres
-    image: 6esxh87qep2f6ksk/postgres-custom-init:latest
+    image: snowclone/postgres:2.0.0
     restart: unless-stopped
     ports:
       - "5433:5432"
