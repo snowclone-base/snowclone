@@ -47,7 +47,7 @@ services:
     volumes:
       - ./server:/server
   eventserver:
-    image: snowclone/eventserver:1.0.0
+    image: snowclone/eventserver:1.0.1
     depends_on:
       db:
         condition: service_healthy
