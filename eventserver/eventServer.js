@@ -1,32 +1,11 @@
 import "dotenv/config";
-import http from "http";
+import express from "express";
 import { EventEmitter } from "events";
 import createSubscriber from "pg-listen";
 
+const app = express();
+
 const sseEmitter = new EventEmitter();
-
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  });
-
-  const listener = (payload) => {
-    res.write(`data: ${JSON.stringify(payload)}\n\n`);
-  };
-
-  sseEmitter.on("db_changes", listener);
-
-  req.on("close", () => {
-    sseEmitter.off("db_changes", listener);
-  });
-});
-
-server.listen(8080);
 
 const subscriber = createSubscriber({
   host: process.env.PG_HOST,
@@ -58,3 +37,32 @@ subscriber
     console.error("Error connecting to PostgreSQL:", error);
     process.exit(1);
   });
+
+app.get("/", (req, res) => {
+  res.sendStatus(200);
+});
+
+app.get("/realtime", (req, res) => {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  });
+
+  const listener = (payload) => {
+    res.write(`data: ${JSON.stringify(payload)}\n\n`);
+  };
+
+  sseEmitter.on("db_changes", listener);
+
+  req.on("close", () => {
+    sseEmitter.off("db_changes", listener);
+  });
+});
+
+app.listen(8080, () => {
+  console.log("Server is running on port 8080");
+});
