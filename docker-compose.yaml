@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
   admin:
     container_name: db-admin
-    image: snowclone/admin:1.0.1
+    image: snowclone/admin:2.0.1
     depends_on:
       db:
         condition: service_healthy
@@ -47,7 +47,7 @@ services:
     volumes:
       - ./server:/server
   eventserver:
-    image: snowclone/eventserver:2.0.0
+    image: snowclone/eventserver:3.0.1
     depends_on:
       db:
         condition: service_healthy
