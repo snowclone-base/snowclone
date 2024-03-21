@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
   admin:
     container_name: db-admin
-    image: snowclone/admin:1.0.1
+    image: snowclone/admin:2.0.1
     depends_on:
       db:
         condition: service_healthy
@@ -47,18 +47,18 @@ services:
     volumes:
       - ./server:/server
   eventserver:
-    image: snowclone/eventserver:1.0.2
+    image: snowclone/eventserver:3.0.1
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      PG_USER: postgres
-      PG_PASSWORD: postgres
-      PG_HOST: db
-      PG_PORT: "5432"
-      PG_DATABASE: postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
+      - PG_HOST=db
+      - PG_PORT=5432
+      - PG_DATABASE=postgres
     volumes:
       - ./eventserver:/eventserver
   db:
