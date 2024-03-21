@@ -6,7 +6,7 @@ function App() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:8080');
+    const eventSource = new EventSource('http://localhost:8080/realtime');
 
     const handleTodosChange = (event) => {
       const data = event.data

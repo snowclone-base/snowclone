@@ -3,3 +3,4 @@ node_modules
 admin/node_modules
 server/node_modules
 eventserver/node_modules
+eventserver/.env
