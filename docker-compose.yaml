@@ -3,7 +3,7 @@ version: "3"
 services:
   postgrest:
     container_name: postgREST
-    image: 6esxh87qep2f6ksk/postgrest-curl:latest # postgrest/postgrest:latest
+    image: snowclone/postg-rest:1.0.1 # postgrest/postgrest:latest
     depends_on:
       db:
         condition: service_healthy
@@ -92,14 +92,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      postgrest:
-        condition: service_healthy
     ports:
       - "8081:8080"
     environment:
-      # saw the API_URL property on the postgREST tutorial page, seems to work if uncommented
-      # and then swagger_json and associated volumes lines are commented out.
-      # - API_URL=http://localhost:3000/
       - SWAGGER_JSON=/api/openapi.json
     volumes:
       - ./swagger:/api
