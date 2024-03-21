@@ -35,17 +35,16 @@ services:
     volumes:
       - ./admin:/admin
   server:
-    image: snowclone/server:1.0.1
+    image: snowclone/schema-server:2.0.0
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "5175:5175"
     environment:
-      PORT: "5175"
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
     volumes:
-      - ./server:/server
+      - ./schema-server:/schema-server
   eventserver:
     image: snowclone/eventserver:3.0.1
     depends_on:
