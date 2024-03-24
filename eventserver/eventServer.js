@@ -40,31 +40,47 @@ subscriber
     process.exit(1);
   });
 
+// Heartbeat interval in milliseconds
+const HEARTBEAT_INTERVAL = 59000; // 59 seconds.
+const HEADERS = {
+  "Content-Type": "text/event-stream",
+  "Cache-Control": "no-cache",
+  Connection: "keep-alive",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+function sendHeartbeat(res) {
+  res.write("event: heartbeat\n");
+  res.write("data: \n\n");
+}
+
 app.get("/", (req, res) => {
   res.sendStatus(200);
 });
 
 app.get("/realtime", (req, res) => {
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  });
+  res.writeHead(200, HEADERS);
 
-  const listener = (payload) => {
+  const sendUpdates = (payload) => {
     res.write(`data: ${JSON.stringify(payload)}\n\n`);
   };
 
-  sseEmitter.on("db_changes", listener);
+  sseEmitter.on("db_changes", sendUpdates);
 
+  // Send heartbeat at intervals
+  const intervalId = setInterval(() => {
+    sendHeartbeat(res);
+  }, HEARTBEAT_INTERVAL);
+
+  // Stop sending heartbeat when the client closes connection
   req.on("close", () => {
-    sseEmitter.off("db_changes", listener);
+    clearInterval(intervalId);
+    sseEmitter.off("db_changes", sendUpdates);
   });
 });
 
 app.listen(8080, () => {
-  console.log("Server is running on port 8080");
+  console.log("Event server is running on port 8080");
 });

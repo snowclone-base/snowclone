@@ -1,5 +1,5 @@
 {
-  "name": "relay",
+  "name": "event-server",
   "version": "1.0.0",
   "main": "wss.js",
   "dependencies": {
