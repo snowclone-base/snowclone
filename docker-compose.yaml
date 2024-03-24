@@ -54,7 +54,7 @@ services:
     volumes:
       - ./schema-server:/schema-server
   eventserver:
-    image: snowclone/eventserver:3.0.1
+    image: 6esxh87qep2f6ksk/event-server:heartbeat #snowclone/eventserver:3.0.1
     depends_on:
       db:
         condition: service_healthy
