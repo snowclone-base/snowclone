@@ -4,3 +4,4 @@ admin/node_modules
 server/node_modules
 eventserver/node_modules
 eventserver/.env
+schema-server/.env

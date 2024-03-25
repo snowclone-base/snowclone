@@ -42,7 +42,7 @@ services:
       - "5173:5173"
     volumes:
       - ./admin:/admin
-  server:
+  schema-server:
     image: snowclone/schema-server:2.0.0
     depends_on:
       db:
@@ -51,6 +51,7 @@ services:
       - "5175:5175"
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+      API_TOKEN: helo
     volumes:
       - ./schema-server:/schema-server
   eventserver:
