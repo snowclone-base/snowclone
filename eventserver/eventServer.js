@@ -52,8 +52,9 @@ const HEADERS = {
 };
 
 function sendHeartbeat(res) {
-  res.write("event: heartbeat\n");
-  res.write("data: \n\n");
+  // res.write("event: heartbeat\n");
+  // res.write("data: \n\n");
+  res.write(":\n\n");
 }
 
 app.get("/", (req, res) => {
