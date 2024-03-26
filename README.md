@@ -3,7 +3,7 @@
 **updated commands for starting via docker**
 
 - start docker desktop
-- run `docker compose up` to start the admin, server, database, and eventserver
+- run `docker compose up` to start the admin, schema server, database, and event server
 - on command line, run `export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGV2X2FkbWluIn0.AGT3mJ9MB8HEBBOvuOWtjSWvA4PALfzhbaaOB-qFD8I` (no quotes!)
 - the above is your JWT Token for the newly created role: `dev_admin`. Now you can run curl commands against the new API!
   - dev_admin role on our database by default has ALL privileges to ALL tables and ALL sequences (necessary for inserting new data) in schema 'api'. (see /sql/apiSchema.sql for exact privileges granted)
@@ -13,34 +13,10 @@
 
   ex2: view all todos `curl -H "Authorization: Bearer $TOKEN" http://localhost:3000/todos`
 
-- to upload sql files: `curl -F 'file=@test.sql' http://localhost:5175/schema` from the directory the sql file is in
+- to upload sql files: `curl -H "Authorization: Bearer helo" -F 'file=@test.sql' http://localhost:5175/schema` from the directory the sql file is in
+
 - to test login functionality: `curl -X POST -H 'Content-Type: application/json' -d '{"email": "user@snowclone.com", "pass": "snowclone"}' http://localhost:3000/rpc/login`
 
   - use the JWT in the response to make a POST request to the postgrest api
-  <!-- **commands for running locally**
-
-- Run `createdb supaSkateboard`
-- Connect to db using `psql supaSkateboard`
-- Run the SQL in supaSchema.sql to create tables
-- Run the SQL in seed-data.sql to populate the tables
-- Run the SQL in listener.sql to attach a listener for any updates in todos
-- Run `LISTEN todos_change;` while connected to the supaSkateboard database
-- Connect to supaSkateboard from a different terminal and perform insert / update / delete on a todo
-- From the listening terminal, run any sql command `;` and you should receive the notification
-
-- run `npm install`
-- start the listener client with `npm start`
-- create a .env file with the following:
-  - PG_HOST
-  - PG_PORT
-  - PG_DATABASE
-  - PG_USER
-  - PG_PASSWORD
-- PG_DATABASE=supaSkateboard
-- The other env variables you can find by running `\conninfo` while connected to psql
-- connect to the database from another psql terminal and test by adding a record to the todos table:
-  `sql
-  INSERT INTO todos (title, done, username, todolist_id) VALUES
-  ('Test notifications', false, 'user1', 1); -->
 
 <!-- current Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGV2X2FkbWluIn0.AGT3mJ9MB8HEBBOvuOWtjSWvA4PALfzhbaaOB-qFD8I -->
