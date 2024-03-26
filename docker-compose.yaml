@@ -18,7 +18,7 @@ services:
       # The name of which database schema to expose to REST clients
       - PGRST_DB_SCHEMA=api
       # The database role to use when no client authentication is provided
-      - PGRST_DB_ANON_ROLE=web_anon
+      - PGRST_DB_ANON_ROLE=anon
       # Overrides the base URL used within the OpenAPI self-documentation hosted at the API root path
       - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
       # JWT PASSWORD for todo_user (notice no quotes around below password)
@@ -42,8 +42,8 @@ services:
       - "5173:5173"
     volumes:
       - ./admin:/admin
-  server:
-    image: snowclone/schema-server:2.0.0
+  schema-server:
+    image: snowclone/schema-server:2.0.2
     depends_on:
       db:
         condition: service_healthy
@@ -51,6 +51,7 @@ services:
       - "5175:5175"
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+      API_TOKEN: helo
     volumes:
       - ./schema-server:/schema-server
   eventserver:
@@ -70,7 +71,7 @@ services:
       - ./eventserver:/eventserver
   db:
     container_name: postgres
-    image: snowclone/postgres:2.0.1
+    image: snowclone/postgres:3.0.1
     restart: unless-stopped
     ports:
       - "5433:5432"
