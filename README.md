@@ -13,7 +13,11 @@
 
   ex2: view all todos `curl -H "Authorization: Bearer $TOKEN" http://localhost:3000/todos`
 
-<!-- **commands for running locally**
+- to upload sql files: `curl -F 'file=@test.sql' http://localhost:5175/schema` from the directory the sql file is in
+- to test login functionality: `curl -X POST -H 'Content-Type: application/json' -d '{"email": "user@snowclone.com", "pass": "snowclone"}' http://localhost:3000/rpc/login`
+
+  - use the JWT in the response to make a POST request to the postgrest api
+  <!-- **commands for running locally**
 
 - Run `createdb supaSkateboard`
 - Connect to db using `psql supaSkateboard`
@@ -36,7 +40,7 @@
 - The other env variables you can find by running `\conninfo` while connected to psql
 - connect to the database from another psql terminal and test by adding a record to the todos table:
   `sql
-        INSERT INTO todos (title, done, username, todolist_id) VALUES
-('Test notifications', false, 'user1', 1); -->
+  INSERT INTO todos (title, done, username, todolist_id) VALUES
+  ('Test notifications', false, 'user1', 1); -->
 
 <!-- current Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGV2X2FkbWluIn0.AGT3mJ9MB8HEBBOvuOWtjSWvA4PALfzhbaaOB-qFD8I -->
