@@ -13,7 +13,7 @@
 
   ex2: view all todos `curl -H "Authorization: Bearer $TOKEN" http://localhost:3000/todos`
 
-- to upload sql files: `curl -H "Authorization: Bearer helo" -F 'file=@test.sql' http://localhost:5175/schema` from the directory the sql file is in
+- to upload sql files: `curl -H "Authorization: Bearer blizzard" -F 'file=@test.sql' http://localhost:5175/schema` from the directory the sql file is in
 
 - to test login functionality: `curl -X POST -H 'Content-Type: application/json' -d '{"email": "user@snowclone.com", "pass": "snowclone"}' http://localhost:3000/rpc/login`
 
