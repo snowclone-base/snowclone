@@ -9,22 +9,7 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
-    # Available environment variables documented here:
-    # https://postgrest.org/en/latest/configuration.html#environment-variables
-    environment:
-      # The standard connection URI format, documented at
-      # https://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING
-      - PGRST_DB_URI=postgres://authenticator:mysecretpassword@db:5432/postgres
-      # The name of which database schema to expose to REST clients
-      - PGRST_DB_SCHEMA=api
-      # The database role to use when no client authentication is provided
-      - PGRST_DB_ANON_ROLE=anon
-      # Overrides the base URL used within the OpenAPI self-documentation hosted at the API root path
-      - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
-      # JWT PASSWORD for todo_user (notice no quotes around below password)
-      - PGRST_JWT_SECRET=${PGRST_JWT_SECRET}
-      # Enable admin server port for health check
-      - PGRST_ADMIN_SERVER_PORT=3001
+    env_file: .env
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3001/ready || exit 1"]
@@ -49,13 +34,7 @@ services:
         condition: service_healthy
     ports:
       - "5175:5175"
-    environment:
-      - PG_USER=postgres
-      - PG_PASSWORD=postgres
-      - PG_HOST=db
-      - PG_PORT=5432
-      - PG_DATABASE=postgres
-      - API_TOKEN=helo
+    env_file: .env
     volumes:
       - ./schema-server:/schema-server
   eventserver:
@@ -65,24 +44,16 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
-    environment:
-      - PG_USER=postgres
-      - PG_PASSWORD=postgres
-      - PG_HOST=db
-      - PG_PORT=5432
-      - PG_DATABASE=postgres
+    env_file: .env
     volumes:
       - ./eventserver:/eventserver
   db:
     container_name: postgres
-    image: snowclone/postgres:3.0.1
+    image: snowclone/postgres:3.0.5
     restart: unless-stopped
     ports:
       - "5433:5432"
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
+    env_file: .env
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
@@ -95,8 +66,7 @@ services:
     image: swaggerapi/swagger-ui
     ports:
       - "8081:8080"
-    environment:
-      - SWAGGER_JSON=/api/openapi.json
+    env_file: .env
     volumes:
       - ./swagger:/api
     restart: unless-stopped
