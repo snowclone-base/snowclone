@@ -43,15 +43,19 @@ services:
     volumes:
       - ./admin:/admin
   schema-server:
-    image: snowclone/schema-server:2.0.2
+    image: snowclone/schema-server:3.0.0
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "5175:5175"
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
-      API_TOKEN: helo
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
+      - PG_HOST=db
+      - PG_PORT=5432
+      - PG_DATABASE=postgres
+      - API_TOKEN=helo
     volumes:
       - ./schema-server:/schema-server
   eventserver:
