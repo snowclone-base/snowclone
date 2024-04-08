@@ -2,9 +2,10 @@
   "name": "schema-server",
   "version": "2.0.0",
   "description": "The schema import API server for Snowclone.",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles --watch",
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
@@ -21,7 +22,13 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^6.3.4"
   },
-  "type": "module"
+  "jest": {
+    "testEnvironment": "node"
+  }
 }

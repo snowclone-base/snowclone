@@ -5,8 +5,10 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 // utils to create path to file
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+const filePath = path.dirname(__filename);
+
+const __dirname = dirname(filePath);
 const storagePath = path.join(__dirname, "..", "tmp", "my-uploads");
 
 const storage = multer.diskStorage({

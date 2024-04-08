@@ -15,12 +15,18 @@ const CONNECTION = {
 };
 
 export const dbQuery = async (statement, ...parameters) => {
-  let client = new Client(CONNECTION);
+  try {
+    let client = new Client(CONNECTION);
 
-  await client.connect();
-  // logQuery(statement, parameters);
-  let result = await client.query(statement, parameters);
-  await client.end();
+    await client.connect();
+    // logQuery(statement, parameters);
+    let result = await client.query(statement, parameters);
+    await client.end();
 
-  return result;
+    return result;
+  } catch (error) {
+    // Handle any errors that occur during database query execution
+    console.error("Error executing database query:", error);
+    throw error; // Re-throw the error to propagate it to the caller
+  }
 };
