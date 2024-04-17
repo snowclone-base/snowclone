@@ -2,24 +2,16 @@ create schema api;
 
 create role authenticator noinherit login password 'mysecretpassword';
 
-create role anon noinherit;
+create role anon nologin;
 grant anon to authenticator;
 grant usage on schema api to anon;
 
-create role member noinherit;
-grant member to authenticator;
-grant usage on schema api to member;
+create role webuser nologin;
+grant webuser to authenticator;
+grant usage on schema api to webuser;
 
-create role dev_admin nologin;
-grant usage on schema api to dev_admin;
-grant dev_admin to authenticator;
-
-alter default privileges in schema api grant all on TABLES TO dev_admin;
-alter default privileges in schema api grant all on SEQUENCES TO dev_admin;
-alter default privileges in schema api grant all on FUNCTIONS TO dev_admin;
-
-alter default privileges in schema api grant SELECT, UPDATE, INSERT, DELETE on TABLES TO member;
-alter default privileges in schema api grant SELECT, UPDATE on SEQUENCES TO member;
+alter default privileges in schema api grant all on TABLES TO webuser;
+alter default privileges in schema api grant all on SEQUENCES TO webuser;
 
 -- Automatic reloading of schema on ddl_command_end
 -- Create an event trigger function

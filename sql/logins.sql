@@ -146,4 +146,4 @@ $$ language plpgsql security definer;
 grant execute on function api.login(text,text) to anon;
 
 insert into basic_auth.users (email, pass, role) values 
-  ('user@snowclone.com', 'snowclone', 'member');
+  ('user@snowclone.com', 'snowclone', 'webuser');
