@@ -8,6 +8,8 @@ const app = express();
 app.use(cors());
 
 const sseEmitter = new EventEmitter();
+// Set Max Listener value for single event to infinity
+sseEmitter.setMaxListeners(0);
 
 const subscriber = createSubscriber({
   host: process.env.PG_HOST,
@@ -41,7 +43,7 @@ subscriber
   });
 
 // Heartbeat interval in milliseconds
-const HEARTBEAT_INTERVAL = 59000; // 59 seconds.
+const HEARTBEAT_INTERVAL = 30000; // 30 seconds.
 const HEADERS = {
   "Content-Type": "text/event-stream",
   "Cache-Control": "no-cache",
@@ -52,7 +54,7 @@ const HEADERS = {
 };
 
 function sendHeartbeat(res) {
-  res.write(":\n\n");
+  res.write(":keepalive\n\n");
 }
 
 app.get("/", (req, res) => {
